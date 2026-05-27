@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: safescribe-api-staging
+  namespace: argocd
+  annotations:
+    # ArgoCD Image Updater — updates image.tag in values.staging.yaml on new GHCR push
+    argocd-image-updater.argoproj.io/image-list: "api=ghcr.io/rchurro/safescribe-api"
+    argocd-image-updater.argoproj.io/api.tag-match: "regexp:^staging-[a-f0-9]+$"
+    argocd-image-updater.argoproj.io/api.update-strategy: latest
+    argocd-image-updater.argoproj.io/write-back-method: git
+    argocd-image-updater.argoproj.io/git-branch: staging
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/rchurro/safescribe-api
+    targetRevision: staging
+    path: helm
+    helm:
+      valueFiles:
+        - values.yaml
+        - values.staging.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: safescribe-staging
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

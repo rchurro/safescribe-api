@@ -1,0 +1,6 @@
+apiVersion: v2
+name: safescribe-api
+description: SafeScribe API — FastAPI paywall backend for WebLLM model access
+type: application
+version: 0.1.0
+appVersion: "1.0.0"

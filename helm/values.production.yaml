@@ -1,0 +1,27 @@
+replicaCount: 2
+
+image:
+  tag: main  # ArgoCD Image Updater sets this to main-<sha>
+
+config:
+  ENVIRONMENT: production
+  DEBUG: "false"
+  ALLOWED_ORIGINS: '["https://safescribe.mai.style"]'
+
+vault:
+  role: safescribe-api
+  secretPath: secret/data/safescribe/api
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 6
+  targetCPUUtilizationPercentage: 70
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi

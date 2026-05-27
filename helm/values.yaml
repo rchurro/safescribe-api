@@ -1,0 +1,55 @@
+replicaCount: 2
+
+image:
+  repository: ghcr.io/rchurro/safescribe-api
+  pullPolicy: IfNotPresent
+  tag: ""  # defaults to .Chart.AppVersion; overridden per environment
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8000
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 70
+
+# Non-secret config mounted as env vars via ConfigMap
+config:
+  ENVIRONMENT: production
+  DEBUG: "false"
+  ALLOWED_ORIGINS: '["https://safescribe.mai.style"]'
+
+# Vault Agent Injector integration.
+# Vault must have a policy + k8s auth role named vault.role granting read access to vault.secretPath.
+vault:
+  enabled: true
+  role: safescribe-api
+  secretPath: secret/data/safescribe/api
+
+# Used when vault.enabled=false (local/dev only — do not commit real secrets)
+secretName: safescribe-api-secrets
+
+uvicorn:
+  workers: 2
+
+podAnnotations: {}
+
+nodeSelector: {}
+tolerations: []
+affinity: {}

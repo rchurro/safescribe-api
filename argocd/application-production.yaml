@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: safescribe-api-production
+  namespace: argocd
+  annotations:
+    # ArgoCD Image Updater — updates image.tag in values.production.yaml on new GHCR push to main
+    argocd-image-updater.argoproj.io/image-list: "api=ghcr.io/rchurro/safescribe-api"
+    argocd-image-updater.argoproj.io/api.tag-match: "regexp:^main-[a-f0-9]+$"
+    argocd-image-updater.argoproj.io/api.update-strategy: latest
+    argocd-image-updater.argoproj.io/write-back-method: git
+    argocd-image-updater.argoproj.io/git-branch: main
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/rchurro/safescribe-api
+    targetRevision: main
+    path: helm
+    helm:
+      valueFiles:
+        - values.yaml
+        - values.production.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: safescribe-production
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

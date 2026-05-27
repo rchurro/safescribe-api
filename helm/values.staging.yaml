@@ -1,0 +1,24 @@
+replicaCount: 1
+
+image:
+  tag: staging  # ArgoCD Image Updater sets this to staging-<sha>
+
+config:
+  ENVIRONMENT: staging
+  DEBUG: "false"
+  ALLOWED_ORIGINS: '["https://staging-ssapi.mai.style", "https://safescribe.mai.style"]'
+
+vault:
+  role: safescribe-api-staging
+  secretPath: secret/data/safescribe/api-staging
+
+autoscaling:
+  enabled: false
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    cpu: 250m
+    memory: 256Mi
