@@ -12,6 +12,9 @@ vault:
   role: safescribe-api-staging
   secretPath: secret/data/safescribe/api-staging
 
+uvicorn:
+  workers: 1
+
 autoscaling:
   enabled: false
 
