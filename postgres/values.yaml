@@ -1,0 +1,16 @@
+auth:
+  username: safescribe
+  # password set via --set auth.password=... at install time
+  database: safescribe
+
+primary:
+  persistence:
+    size: 10Gi
+  initdb:
+    scripts:
+      create_staging.sql: |
+        CREATE DATABASE safescribe_staging;
+        GRANT ALL PRIVILEGES ON DATABASE safescribe_staging TO safescribe;
+
+readReplicas:
+  replicaCount: 0

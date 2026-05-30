@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Bootstrap ArgoCD + Image Updater on a k3s cluster for safescribe-api.
+# Bootstrap ArgoCD + Image Updater on a Kubernetes cluster for safescribe-api.
 # Run this once from a machine with kubectl access to your cluster.
 set -euo pipefail
 

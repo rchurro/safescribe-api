@@ -40,31 +40,16 @@ spec:
       securityContext:
         runAsNonRoot: true
         runAsUser: 1001
-      initContainers:
-        - name: migrate
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          {{- if .Values.vault.enabled }}
-          command: ["/bin/sh", "-c", "source /vault/secrets/env && exec alembic upgrade head"]
-          {{- else }}
-          command: ["alembic", "upgrade", "head"]
-          {{- end }}
-          envFrom:
-            - configMapRef:
-                name: {{ include "safescribe-api.fullname" . }}-config
-            {{- if not .Values.vault.enabled }}
-            - secretRef:
-                name: {{ .Values.secretName }}
-            {{- end }}
       containers:
         - name: api
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.vault.enabled }}
           command: ["/bin/sh", "-c"]
-          args: ["source /vault/secrets/env && exec uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers {{ .Values.uvicorn.workers }}"]
+          args: [". /vault/secrets/env && alembic upgrade head && exec uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers {{ .Values.uvicorn.workers }}"]
           {{- else }}
-          command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "{{ .Values.uvicorn.workers }}"]
+          command: ["/bin/sh", "-c"]
+          args: ["alembic upgrade head && exec uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers {{ .Values.uvicorn.workers }}"]
           {{- end }}
           ports:
             - name: http

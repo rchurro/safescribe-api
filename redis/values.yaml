@@ -1,0 +1,9 @@
+auth:
+  enabled: false  # internal cluster traffic only
+
+master:
+  persistence:
+    size: 2Gi
+
+replica:
+  replicaCount: 0
