@@ -140,6 +140,22 @@ Vault paths:
 - Production: `secret/data/safescribe/api` (role: `safescribe-api`)
 - Staging: `secret/data/safescribe/api-staging` (role: `safescribe-api-staging`)
 
+## Infrastructure layout
+
+Both environments run on the same Kubernetes cluster. Some infrastructure is shared, some is isolated:
+
+| Component | Shared or isolated |
+|---|---|
+| PostgreSQL pod | **Shared** — separate databases (`safescribe` vs `safescribe_staging`) |
+| Redis pod | **Shared** — separate DB indexes (`/0` vs `/1`) |
+| Vault pod | **Shared** — separate secret paths and auth roles per env |
+| ArgoCD | **Shared** — manages both apps |
+| App pods | **Isolated** — separate namespaces, deployments, service accounts |
+| Stripe keys | **Isolated** — live keys for production, test keys for staging |
+| JWT secrets | **Isolated** — separate keys per environment |
+
+If Postgres or Redis goes down, both environments are affected. This is an intentional tradeoff to keep infrastructure costs low.
+
 ## Helm environments
 
 | Values file | Namespace | Image tag pattern | Replicas | Autoscaling |
