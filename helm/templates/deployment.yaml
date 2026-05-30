@@ -23,12 +23,12 @@ spec:
         vault.hashicorp.com/agent-inject-secret-env: {{ .Values.vault.secretPath | quote }}
         vault.hashicorp.com/agent-inject-template-env: |
           {{`{{- with secret "`}}{{ .Values.vault.secretPath }}{{`" -}}`}}
-          DATABASE_URL={{`{{ .Data.data.database_url }}`}}
-          REDIS_URL={{`{{ .Data.data.redis_url }}`}}
-          JWT_SECRET_KEY={{`{{ .Data.data.jwt_secret_key }}`}}
-          STRIPE_SECRET_KEY={{`{{ .Data.data.stripe_secret_key }}`}}
-          STRIPE_WEBHOOK_SECRET={{`{{ .Data.data.stripe_webhook_secret }}`}}
-          STRIPE_PRICE_ID={{`{{ .Data.data.stripe_price_id }}`}}
+          export DATABASE_URL={{`{{ .Data.data.database_url }}`}}
+          export REDIS_URL={{`{{ .Data.data.redis_url }}`}}
+          export JWT_SECRET_KEY={{`{{ .Data.data.jwt_secret_key }}`}}
+          export STRIPE_SECRET_KEY={{`{{ .Data.data.stripe_secret_key }}`}}
+          export STRIPE_WEBHOOK_SECRET={{`{{ .Data.data.stripe_webhook_secret }}`}}
+          export STRIPE_PRICE_ID={{`{{ .Data.data.stripe_price_id }}`}}
           {{`{{- end -}}`}}
         vault.hashicorp.com/agent-inject-file-env: env
         {{- end }}
