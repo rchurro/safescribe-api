@@ -151,6 +151,7 @@ Both environments run on the same Kubernetes cluster. Some infrastructure is sha
 | Vault pod | **Shared** — separate secret paths and auth roles per env |
 | ArgoCD | **Shared** — manages both apps |
 | App pods | **Isolated** — separate namespaces, deployments, service accounts |
+| Cloudflare Tunnel | **Isolated** — separate tunnel and `cloudflared` deployment per environment |
 | Stripe keys | **Isolated** — live keys for production, test keys for staging |
 | JWT secrets | **Isolated** — separate keys per environment |
 
