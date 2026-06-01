@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     # App
     environment: str = "development"
     debug: bool = False
-    allowed_origins: list[str] = ["https://safescribe.mai.style", "https://staging.safescribe.mai.style", "http://localhost:3000", "http://localhost:5173"]
+    allowed_origins: list[str] = ["https://safescribe.mai.style", "https://staging.safescribe.mai.style", "https://staging.safescribe.pages.dev", "http://localhost:3000", "http://localhost:5173"]
 
     # Database
     database_url: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/safescribe"
