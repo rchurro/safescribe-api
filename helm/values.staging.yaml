@@ -6,7 +6,7 @@ image:
 config:
   ENVIRONMENT: staging
   DEBUG: "false"
-  ALLOWED_ORIGINS: '["https://staging-ssapi.mai.style", "https://safescribe.mai.style"]'
+  ALLOWED_ORIGINS: '["https://safescribe.mai.style","https://staging.safescribe.mai.style","https://staging.safescribe.pages.dev","http://localhost:3000","http://localhost:5173"]'
 
 vault:
   role: safescribe-api-staging
