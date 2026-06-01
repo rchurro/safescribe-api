@@ -43,8 +43,8 @@ async def stripe_webhook(
 
     if event["type"] == "checkout.session.completed":
         session_obj = event["data"]["object"]
-        metadata = session_obj.metadata or {}
-        user_id = int(metadata.get("user_id", 0))
+        metadata = session_obj.metadata
+        user_id = int(getattr(metadata, "user_id", 0)) if metadata else 0
         customer_id = session_obj.customer
         if user_id:
             result = await db.execute(select(User).where(User.id == user_id))
