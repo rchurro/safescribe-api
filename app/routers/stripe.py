@@ -1,6 +1,9 @@
+from typing import Optional
+
 import structlog
 import stripe as stripe_lib
 from fastapi import APIRouter, Depends, Header, HTTPException, Request, status
+from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -13,15 +16,23 @@ logger = structlog.get_logger()
 settings = get_settings()
 
 
+class CheckoutRequest(BaseModel):
+    success_url: Optional[str] = None
+    cancel_url: Optional[str] = None
+
+
 @router.post("/checkout")
-async def create_checkout_session(user: User = Depends(require_auth)):
+async def create_checkout_session(
+    body: CheckoutRequest = CheckoutRequest(),
+    user: User = Depends(require_auth),
+):
     stripe_lib.api_key = settings.stripe_secret_key
     session = stripe_lib.checkout.Session.create(
         payment_method_types=["card"],
         line_items=[{"price": settings.stripe_price_id, "quantity": 1}],
         mode="subscription",
-        success_url=settings.stripe_success_url,
-        cancel_url=settings.stripe_cancel_url,
+        success_url=body.success_url or settings.stripe_success_url,
+        cancel_url=body.cancel_url or settings.stripe_cancel_url,
         customer_email=user.email,
         metadata={"user_id": str(user.id)},
     )
