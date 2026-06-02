@@ -23,7 +23,7 @@ class CheckoutRequest(BaseModel):
 
 @router.post("/checkout")
 async def create_checkout_session(
-    body: CheckoutRequest = CheckoutRequest(),
+    body: CheckoutRequest,
     user: User = Depends(require_auth),
 ):
     stripe_lib.api_key = settings.stripe_secret_key
