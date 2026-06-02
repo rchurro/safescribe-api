@@ -51,3 +51,13 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      - name: Notify Discord
+        if: always()
+        uses: sarisia/actions-status-discord@v1
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          status: ${{ job.status }}
+          title: "safescribe-api image build"
+          description: "Branch: `${{ github.ref_name }}` · Commit: `${{ github.sha }}`"
+          color: ${{ job.status == 'success' && '0x2ecc71' || '0xe74c3c' }}
