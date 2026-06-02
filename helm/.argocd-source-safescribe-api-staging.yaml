@@ -4,5 +4,5 @@ helm:
     value: ghcr.io/rchurro/safescribe-api
     forcestring: true
   - name: image.tag
-    value: staging-f9bdd38
+    value: staging-a56f2f9
     forcestring: true
