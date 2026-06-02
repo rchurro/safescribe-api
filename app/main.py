@@ -1,6 +1,6 @@
 from contextlib import asynccontextmanager
 
-import structlog
+import structlog  # noqa
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from prometheus_fastapi_instrumentator import Instrumentator
