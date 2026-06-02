@@ -68,7 +68,7 @@ async def stripe_webhook(
 
     elif event["type"] in ("customer.subscription.deleted", "invoice.payment_failed", "customer.deleted"):
         obj = event["data"]["object"]
-        customer_id = obj.get("id") if event["type"] == "customer.deleted" else obj.get("customer")
+        customer_id = obj["id"] if event["type"] == "customer.deleted" else obj["customer"]
         if customer_id:
             result = await db.execute(select(User).where(User.stripe_customer_id == customer_id))
             user = result.scalar_one_or_none()
