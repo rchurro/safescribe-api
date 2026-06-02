@@ -8,6 +8,7 @@ spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
+  progressDeadlineSeconds: {{ .Values.progressDeadlineSeconds | default 120 }}
   selector:
     matchLabels:
       {{- include "safescribe-api.selectorLabels" . | nindent 6 }}
