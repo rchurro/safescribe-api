@@ -1,0 +1,7 @@
+injector:
+  enabled: true
+
+server:
+  dataStorage:
+    storageClass: truenas-nfs
+    size: 10Gi

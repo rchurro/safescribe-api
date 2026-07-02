@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Deploy PostgreSQL and Redis on the cluster.
+# Deploy PostgreSQL, Redis, and Vault on the cluster.
 # Run once from a machine with kubectl + helm access.
 set -euo pipefail
 
@@ -56,6 +56,29 @@ echo "    Redis ready."
 echo ""
 echo "    Production URL: redis://${REDIS_RELEASE}-master.${REDIS_NAMESPACE}.svc.cluster.local:6379/0"
 echo "    Staging URL:    redis://${REDIS_RELEASE}-master.${REDIS_NAMESPACE}.svc.cluster.local:6379/1"
+
+# ── Vault ─────────────────────────────────────────────────────────────────────
+
+VAULT_NAMESPACE="vault"
+VAULT_RELEASE="vault"
+
+echo ""
+echo "==> Installing Vault"
+kubectl create namespace "$VAULT_NAMESPACE" --dry-run=client -o yaml | kubectl apply -f -
+helm repo add hashicorp https://helm.releases.hashicorp.com
+helm repo update
+
+helm upgrade --install "$VAULT_RELEASE" hashicorp/vault \
+  --namespace "$VAULT_NAMESPACE" \
+  --values "$ROOT_DIR/vault/values.yaml" \
+  --wait
+
+echo ""
+echo "    Vault installed. Next steps:"
+echo "    1. vault operator init -key-shares=1 -key-threshold=1"
+echo "    2. vault operator unseal <unseal-key>"
+echo "    3. vault login <root-token>"
+echo "    4. Populate secrets — see TODO.md 'Vault — Populate Secrets'"
 
 # ── Summary ───────────────────────────────────────────────────────────────────
 

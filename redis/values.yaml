@@ -4,6 +4,7 @@ auth:
 master:
   persistence:
     size: 2Gi
+    storageClass: truenas-nfs
 
 replica:
   replicaCount: 0

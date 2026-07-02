@@ -6,6 +6,7 @@ auth:
 primary:
   persistence:
     size: 10Gi
+    storageClass: truenas-nfs
   initdb:
     scripts:
       create_staging.sql: |
