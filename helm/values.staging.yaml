@@ -1,4 +1,4 @@
-replicaCount: 1
+replicaCount: 0
 
 image:
   tag: staging  # ArgoCD Image Updater sets this to staging-<sha>
