@@ -42,8 +42,18 @@ vault:
   role: safescribe-api
   secretPath: secret/data/safescribe/api
 
-# Used when vault.enabled=false (local/dev only — do not commit real secrets)
+# Secret the deployment loads via envFrom when vault.enabled=false. Either created by
+# ESO (externalSecrets.enabled=true) or by hand for local/dev — never commit real values.
 secretName: safescribe-api-secrets
+
+# Sync secretName from Bitwarden Secrets Manager via External Secrets Operator.
+# Mutually exclusive with vault.enabled.
+externalSecrets:
+  enabled: false
+  storeName: bitwarden-homelab
+  refreshInterval: 1h
+  # env var name -> Bitwarden secret name
+  data: {}
 
 uvicorn:
   workers: 2

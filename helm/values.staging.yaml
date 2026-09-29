@@ -9,8 +9,19 @@ config:
   ALLOWED_ORIGINS: '["https://safescribe.mai.style","https://staging.safescribe.mai.style","https://staging.safescribe.pages.dev","http://localhost:3000","http://localhost:5173"]'
 
 vault:
+  enabled: false  # replaced by externalSecrets (Bitwarden) 2026-09-29
   role: safescribe-api-staging
   secretPath: secret/data/safescribe/api-staging
+
+externalSecrets:
+  enabled: true
+  data:
+    DATABASE_URL: SAFESCRIBE_STAGING_DATABASE_URL
+    REDIS_URL: SAFESCRIBE_STAGING_REDIS_URL
+    JWT_SECRET_KEY: SAFESCRIBE_STAGING_JWT_SECRET_KEY
+    STRIPE_SECRET_KEY: SAFESCRIBE_STAGING_STRIPE_SECRET_KEY
+    STRIPE_WEBHOOK_SECRET: SAFESCRIBE_STAGING_STRIPE_WEBHOOK_SECRET
+    STRIPE_PRICE_ID: SAFESCRIBE_STAGING_STRIPE_PRICE_ID
 
 uvicorn:
   workers: 1

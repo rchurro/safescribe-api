@@ -9,8 +9,20 @@ config:
   ALLOWED_ORIGINS: '["https://safescribe.mai.style"]'
 
 vault:
+  enabled: false  # replaced by externalSecrets (Bitwarden) 2026-09-29
   role: safescribe-api
   secretPath: secret/data/safescribe/api
+
+# Production was never taken live. Its Vault path only ever held these four values,
+# and DATABASE_URL / STRIPE_* are identical to staging's. Before a real launch it needs
+# its own DB and live Stripe keys, plus REDIS_URL and STRIPE_PRICE_ID (TODO #14).
+externalSecrets:
+  enabled: true
+  data:
+    DATABASE_URL: SAFESCRIBE_PRODUCTION_DATABASE_URL
+    JWT_SECRET_KEY: SAFESCRIBE_PRODUCTION_JWT_SECRET_KEY
+    STRIPE_SECRET_KEY: SAFESCRIBE_PRODUCTION_STRIPE_SECRET_KEY
+    STRIPE_WEBHOOK_SECRET: SAFESCRIBE_PRODUCTION_STRIPE_WEBHOOK_SECRET
 
 autoscaling:
   enabled: true
