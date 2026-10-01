@@ -4,6 +4,13 @@ metadata:
   name: safescribe-api-staging
   namespace: argocd
   annotations:
+    # Discord alerts are OFF while staging is scaled to 0 (since 2026-08-25): ArgoCD reports a
+    # 0-replica Deployment as Progressing, so the app never looks Healthy and alerts kept firing.
+    # Turn them back on when staging is relaunched:
+    #   kubectl --context home -n argocd annotate application safescribe-api-staging \
+    #     notifications.argoproj.io/subscribe.on-deployed.discord="" \
+    #     notifications.argoproj.io/subscribe.on-health-degraded.discord="" \
+    #     notifications.argoproj.io/subscribe.on-sync-failed.discord=""
     # ArgoCD Image Updater — updates image.tag in values.staging.yaml on new GHCR push
     argocd-image-updater.argoproj.io/image-list: "api=ghcr.io/rchurro/safescribe-api"
     argocd-image-updater.argoproj.io/api.tag-match: "regexp:^staging-[a-f0-9]+$"
