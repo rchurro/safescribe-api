@@ -51,7 +51,7 @@ secretName: safescribe-api-secrets
 externalSecrets:
   enabled: false
   storeName: bitwarden-homelab
-  refreshInterval: 1h
+  refreshInterval: 24h  # Bitwarden throttles logins
   # env var name -> Bitwarden secret name
   data: {}
 
